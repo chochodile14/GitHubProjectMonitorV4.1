@@ -1,0 +1,1 @@
+fetch('/api/stats').then(r=>r.json()).then(d=>{document.getElementById('app').innerHTML='Total commits: '+d.total;});

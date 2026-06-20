@@ -1,17 +1,30 @@
-const Database = require('better-sqlite3');
+const { Pool } = require('pg');
 
-const db = new Database('monitor.db');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 
-db.exec(`
-CREATE TABLE IF NOT EXISTS commits (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    author TEXT,
-    branch TEXT,
-    repository TEXT,
-    message TEXT,
-    url TEXT,
-    date TEXT
-)
-`);
+async function initDatabase() {
 
-module.exports = db;
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS commits (
+            id SERIAL PRIMARY KEY,
+            author TEXT,
+            branch TEXT,
+            repository TEXT,
+            message TEXT,
+            url TEXT,
+            date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
+    console.log('✅ PostgreSQL connecté');
+}
+
+module.exports = {
+    pool,
+    initDatabase
+};

@@ -5,7 +5,7 @@ require('dotenv').config({
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-const db = require('./database');
+const { pool, initDatabase } = require('./database');
 
 const app = express();
 
@@ -46,55 +46,41 @@ async function sendWhatsApp(message) {
 |--------------------------------------------------------------------------
 */
 
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', async (req, res) => {
 
-    const totalCommits =
-        db.prepare('SELECT COUNT(*) as total FROM commits')
-        .get();
+    const total =
+        await pool.query(
+            'SELECT COUNT(*) FROM commits'
+        );
 
     const developers =
-        db.prepare(`
-            SELECT COUNT(DISTINCT author) as total
-            FROM commits
-        `)
-        .get();
-
-    const lastCommit =
-        db.prepare(`
-            SELECT *
-            FROM commits
-            ORDER BY id DESC
-            LIMIT 1
-        `)
-        .get();
+        await pool.query(
+            'SELECT COUNT(DISTINCT author) FROM commits'
+        );
 
     const topAuthors =
-        db.prepare(`
-            SELECT
-                author,
-                COUNT(*) as commits
+        await pool.query(`
+            SELECT author,
+                   COUNT(*) as commits
             FROM commits
             GROUP BY author
             ORDER BY commits DESC
             LIMIT 10
-        `)
-        .all();
+        `);
 
     const commits =
-        db.prepare(`
+        await pool.query(`
             SELECT *
             FROM commits
             ORDER BY id DESC
             LIMIT 100
-        `)
-        .all();
+        `);
 
     res.json({
-        totalCommits: totalCommits.total,
-        developers: developers.total,
-        lastCommit,
-        topAuthors,
-        commits
+        totalCommits: Number(total.rows[0].count),
+        developers: Number(developers.rows[0].count),
+        topAuthors: topAuthors.rows,
+        commits: commits.rows
     });
 
 });
@@ -161,7 +147,21 @@ app.post('/webhook/github', async (req, res) => {
         for (const c of payload.commits) {
 
             db.prepare(`
+                await pool.query(
+                `
                 INSERT INTO commits
+                (author, branch, repository, message, url, date)
+                VALUES ($1,$2,$3,$4,$5,$6)
+                `,
+            [
+                 c.author.name,
+                req.body.ref || 'main',
+                req.body.repository?.name || 'unknown',
+                c.message,
+                c.url,
+                new Date()
+            ]
+            );
                 (
                     author,
                     branch,
@@ -227,11 +227,14 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+initDatabase().then(() => {
 
-    console.log('');
-    console.log('🔥 RPG Project Monitor V4.1');
-    console.log(`🌐 http://localhost:${PORT}`);
-    console.log('');
+    app.listen(process.env.PORT || 3000, () => {
+
+        console.log('');
+        console.log('🔥 RPG Project Monitor V4.1');
+        console.log('🌐 Serveur lancé');
+
+    });
 
 });

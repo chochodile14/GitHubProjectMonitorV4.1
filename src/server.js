@@ -1,7 +1,7 @@
 require('dotenv').config({
     path: require('path').join(__dirname, '..', '.env')
 });
-
+console.log('DATABASE_URL =', process.env.DATABASE_URL);
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
@@ -91,20 +91,19 @@ app.get('/api/stats', async (req, res) => {
 |--------------------------------------------------------------------------
 */
 
-app.get('/api/authors', (req, res) => {
+app.get('/api/activity', async (req, res) => {
 
-    const authors =
-        db.prepare(`
-            SELECT
-                author,
-                COUNT(*) as commits
-            FROM commits
-            GROUP BY author
-            ORDER BY commits DESC
-        `)
-        .all();
+    const activity = await pool.query(`
+        SELECT
+            DATE(date) as day,
+            COUNT(*) as commits
+        FROM commits
+        GROUP BY day
+        ORDER BY day DESC
+        LIMIT 30
+    `);
 
-    res.json(authors);
+    res.json(activity.rows);
 
 });
 
@@ -146,38 +145,20 @@ app.post('/webhook/github', async (req, res) => {
 
         for (const c of payload.commits) {
 
-            db.prepare(`
-                await pool.query(
+            await pool.query(
                 `
                 INSERT INTO commits
                 (author, branch, repository, message, url, date)
                 VALUES ($1,$2,$3,$4,$5,$6)
                 `,
-            [
-                 c.author.name,
-                req.body.ref || 'main',
-                req.body.repository?.name || 'unknown',
-                c.message,
-                c.url,
-                new Date()
-            ]
-            );
-                (
-                    author,
-                    branch,
-                    repository,
-                    message,
-                    url,
-                    date
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-            `).run(
-                c.author.name,
-                payload.ref || 'main',
-                payload.repository?.name || 'unknown',
-                c.message,
-                c.url,
-                new Date().toISOString()
+                [
+                    c.author.name,
+                    payload.ref || 'main',
+                    payload.repository?.name || 'unknown',
+                    c.message,
+                    c.url,
+                    new Date()
+                ]
             );
 
             await sendWhatsApp(`

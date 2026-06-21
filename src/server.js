@@ -1,6 +1,7 @@
 require('dotenv').config({
     path: require('path').join(__dirname, '..', '.env')
 });
+console.log('DB URL dans database.js =', process.env.DATABASE_URL);
 console.log('DATABASE_URL =', process.env.DATABASE_URL);
 const express = require('express');
 const axios = require('axios');

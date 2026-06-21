@@ -163,13 +163,20 @@ app.post('/webhook/github', async (req, res) => {
             );
 
             await sendWhatsApp(`
-🔥 Nouvelle mise à jour du Royaume RPG
+🐉 LE ROYAUME RPG 🐉
 
-👤 ${c.author.name}
+🔥 Événement détecté
 
-⚔ Branche : ${payload.ref || 'main'}
+👤 Aventurier :
+${c.author.name}
 
-📜 ${c.message}
+📜 Quête accomplie :
+${c.message}
+
+🌍 Région :
+${payload.ref || 'main'}
+
+⚔ Les archives du royaume ont été mises à jour.
 
 🔗 ${c.url}
 `);

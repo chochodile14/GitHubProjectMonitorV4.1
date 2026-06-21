@@ -141,7 +141,8 @@ app.get('/api/activity', (req, res) => {
 app.post('/webhook/github', async (req, res) => {
 
     const payload = req.body;
-
+    console.log("WEBHOOK RECU");
+    console.log(JSON.stringify(req.body, null, 2));
     if (payload.commits) {
 
         for (const c of payload.commits) {
@@ -161,8 +162,9 @@ app.post('/webhook/github', async (req, res) => {
                     new Date()
                 ]
             );
+console.log("ENVOI WHATSAPP");
 
-            await sendWhatsApp(`
+await sendWhatsApp(`
 🐉 LE ROYAUME RPG 🐉
 
 🔥 Événement détecté
@@ -180,6 +182,8 @@ ${payload.ref || 'main'}
 
 🔗 ${c.url}
 `);
+
+console.log("WHATSAPP TERMINE");
 
             console.log(
                 '📦 Commit reçu :',

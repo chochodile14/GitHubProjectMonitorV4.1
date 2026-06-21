@@ -1,0 +1,280 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#090909;
+    color:#f5f5f5;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+/* =======================
+   HERO
+======================= */
+
+.hero{
+    position:relative;
+    height:450px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.65),
+        rgba(0,0,0,.85)
+    ),
+    url("https://images.unsplash.com/photo-1518709268805-4e9042af2176");
+
+    background-size:cover;
+    background-position:center;
+    border-bottom:2px solid rgba(255,120,0,.3);
+}
+
+.hero-content{
+    z-index:2;
+}
+
+.logo{
+    width:140px;
+    margin-bottom:20px;
+
+    filter:
+    drop-shadow(0 0 15px #ff6600)
+    drop-shadow(0 0 40px #ff3300);
+}
+
+.hero h1{
+    font-size:4rem;
+    color:#ffb347;
+
+    text-shadow:
+    0 0 15px #ff6600,
+    0 0 40px #ff3300;
+}
+
+.hero p{
+    margin-top:15px;
+    color:#ddd;
+    font-size:1.1rem;
+}
+
+.github-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 25px;
+
+    background:#ff6600;
+    color:white;
+
+    text-decoration:none;
+    border-radius:8px;
+
+    transition:.3s;
+}
+
+.github-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 20px #ff6600;
+}
+
+/* =======================
+   STATS
+======================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+
+    padding:40px;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,120,0,.25);
+
+    backdrop-filter:blur(8px);
+
+    padding:25px;
+    border-radius:15px;
+
+    text-align:center;
+}
+
+.card h2{
+    color:#ffb347;
+    font-size:2rem;
+}
+
+.card p{
+    margin-top:10px;
+    color:#ccc;
+}
+
+/* =======================
+   HEROES
+======================= */
+
+.ranking{
+    padding:40px;
+}
+
+.ranking h2{
+    margin-bottom:20px;
+    color:#ffb347;
+}
+
+#authors{
+    display:grid;
+    gap:15px;
+}
+
+.author{
+    background:#121212;
+
+    border-left:5px solid #ff6600;
+
+    padding:15px;
+    border-radius:10px;
+}
+
+/* =======================
+   HISTORY
+======================= */
+
+.history{
+    padding:40px;
+}
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.history h2{
+    color:#ffb347;
+}
+
+#search{
+    padding:12px;
+    width:300px;
+    border:none;
+    border-radius:10px;
+}
+
+#commits{
+    display:grid;
+    gap:20px;
+}
+
+.commit{
+    background:#131313;
+
+    border:1px solid rgba(255,120,0,.2);
+
+    border-radius:12px;
+
+    padding:20px;
+
+    transition:.3s;
+}
+
+.commit:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 20px rgba(255,120,0,.2);
+}
+
+.commit h3{
+    color:#ffb347;
+}
+
+.commit p{
+    margin-top:10px;
+}
+
+.commit small{
+    display:block;
+    margin-top:10px;
+    color:#999;
+}
+
+/* =======================
+   EMBERS
+======================= */
+
+#embers{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:-1;
+}
+
+#embers::before{
+    content:"";
+
+    position:absolute;
+    width:100%;
+    height:100%;
+
+    background:
+    radial-gradient(
+        circle at 20% 90%,
+        rgba(255,90,0,.25),
+        transparent 40%
+    ),
+    radial-gradient(
+        circle at 80% 80%,
+        rgba(255,140,0,.15),
+        transparent 45%
+    );
+
+    animation:fireGlow 6s infinite alternate;
+}
+
+@keyframes fireGlow{
+
+    from{
+        opacity:.5;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+/* =======================
+   MOBILE
+======================= */
+
+@media(max-width:768px){
+
+.hero{
+    height:380px;
+}
+
+.hero h1{
+    font-size:2.3rem;
+}
+
+#search{
+    width:100%;
+}
+
+}

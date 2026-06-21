@@ -1,1 +1,99 @@
-<html><body style='background:#0f172a;color:white;font-family:Arial'><h1>GitHub Project Monitor V4</h1><div id='app'></div><script src='app.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Le Royaume RPG</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div id="embers"></div>
+
+    <header class="hero">
+
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+
+            <img src="logo.png" class="logo">
+
+            <h1>👑 LE ROYAUME RPG</h1>
+
+            <p>
+                Tableau du Royaume • Archives des Batailles • Surveillance GitHub
+            </p>
+
+            <a
+                href="https://github.com/chochodile14/GitHubProjectMonitorV4.1"
+                target="_blank"
+                class="github-btn">
+
+                ⚔ Accéder au Dépôt
+
+            </a>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <section class="stats">
+
+            <div class="card">
+                <h2 id="totalCommits">0</h2>
+                <p>⚔ Total des batailles</p>
+            </div>
+
+            <div class="card">
+                <h2 id="developers">0</h2>
+                <p>👑 Héros du Royaume</p>
+            </div>
+
+            <div class="card">
+                <h2 id="status">🟢</h2>
+                <p>Royaume opérationnel</p>
+            </div>
+
+        </section>
+
+        <section class="ranking">
+
+            <h2>🏆 Héros du Royaume</h2>
+
+            <div id="authors"></div>
+
+        </section>
+
+        <section class="history">
+
+            <div class="history-header">
+
+                <h2>⚔ Chronique du Royaume</h2>
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Rechercher un exploit..."
+                >
+
+            </div>
+
+            <div id="commits"></div>
+
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
